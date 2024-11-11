@@ -1,70 +1,120 @@
-# Getting Started with Create React App
+# GIF Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the **GIF Generator** project! This web app allows users to generate random GIFs, either completely at random or based on a text input tag. It is built using React and leverages the Giphy API to fetch the GIFs dynamically.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Random GIF Generation:** Fetch a random GIF with a single click.
+- **Tagged GIF Generation:** Enter a keyword and get a GIF related to that tag.
+- **Loading Indicator:** Displays a spinner while the GIF is being fetched.
+- **Custom Hook Implementation:** Created a custom hook for fetching GIFs to simplify and modularize the logic.
 
-### `npm start`
+## Built With
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React**
+- **Giphy API**
+- **Axios** for HTTP requests
+- **Tailwind CSS** for styling
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Ensure you have Node.js and npm installed. You can download them from [here](https://nodejs.org/).
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   git clone https://github.com/your-username/gif-generator.git
+   cd gif-generator
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. Install dependencies:
 
-### `npm run eject`
+   ```bash
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Get a Giphy API key from [Giphy Developers](https://developers.giphy.com/). Replace `API_KEY` in `useGif.js` with your actual key.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Start the development server:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   npm start
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   The app should now be running at `http://localhost:3000`.
 
-## Learn More
+## Project Structure
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- `App.js`: Main entry component that renders the application layout and includes `Random` and `Tag` components.
+- `Random.js`: Displays a random GIF without any specific tag. Uses the `useGif` hook for fetching GIF data.
+- `Tag.js`: Displays a GIF based on user-provided text input. Also uses the `useGif` hook.
+- `useGif.js`: Custom hook for fetching GIFs from the Giphy API.
+- `Spinner.js`: A simple loading spinner component displayed while fetching GIFs.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage
 
-### Code Splitting
+### Random GIFs
+Click on the "Generate" button under **Random GIF** to get a random GIF.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Tagged GIFs
+1. Enter a keyword in the text input under **Random Tag GIF**.
+2. Click on the "Generate" button to fetch a GIF related to that keyword.
 
-### Analyzing the Bundle Size
+## Code Highlights
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Custom Hook (`useGif.js`)
 
-### Making a Progressive Web App
+The `useGif` hook manages the GIF-fetching logic and state. It makes an API request to Giphy using either a random ID or a specified tag and returns the GIF URL and loading status.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-### Advanced Configuration
+const API_KEY = "Your_Giphy_API_Key";
+const url = `https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}`;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+export const useGif = (tag) => {
+  const [gif, setGif] = useState("");
+  const [loading, setLoading] = useState(false);
 
-### Deployment
+  const fetchData = async (tag) => {
+    setLoading(true);
+    try {
+      const output = await axios.get(tag ? `${url}&tag=${tag}` : url);
+      setGif(output.data.data.images.downsized.url);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+  useEffect(() => {
+    fetchData(tag);
+  }, [tag]);
 
-### `npm run build` fails to minify
+  return { gif, loading, fetchData };
+};
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Components
+
+- `Random.js` and `Tag.js` both use the `useGif` hook, passing a `tag` only in `Tag.js` based on user input.
+- Button click events trigger `fetchData` to load a new GIF.
+
+## Screenshots
+
+![GIF Generator Screenshot](path_to_screenshot.png)
+![Screenshot 2024-11-12 003415](https://github.com/user-attachments/assets/51867120-c2e1-447e-9093-f227dd0f8a5f)
+![Screenshot 2024-11-12 003427](https://github.com/user-attachments/assets/aff35a66-e7ec-479a-8716-b16f649e733b)
+![Screenshot 2024-11-12 003538](https://github.com/user-attachments/assets/a02e374d-5440-4fb5-abb6-5ad5e135e07f)
+![Screenshot 2024-11-12 003538](https://github.com/user-attachments/assets/64c96b07-1a47-4fc6-8299-9d527eecbb1a)
+
+## License![Screenshot 2024-11-12 003449](https://github.com/user-attachments/assets/27b9dd38-3524-49a7-b14e-c8fc91680d4a)
+
+
+This project is licensed under the MIT License.
