@@ -108,13 +108,12 @@ export const useGif = (tag) => {
 
 ## Screenshots
 
-![GIF Generator Screenshot](path_to_screenshot.png)
 ![Screenshot 2024-11-12 003415](https://github.com/user-attachments/assets/51867120-c2e1-447e-9093-f227dd0f8a5f)
 ![Screenshot 2024-11-12 003427](https://github.com/user-attachments/assets/aff35a66-e7ec-479a-8716-b16f649e733b)
 ![Screenshot 2024-11-12 003538](https://github.com/user-attachments/assets/a02e374d-5440-4fb5-abb6-5ad5e135e07f)
 ![Screenshot 2024-11-12 003538](https://github.com/user-attachments/assets/64c96b07-1a47-4fc6-8299-9d527eecbb1a)
 
-## License![Screenshot 2024-11-12 003449](https://github.com/user-attachments/assets/27b9dd38-3524-49a7-b14e-c8fc91680d4a)
+## License!
 
 
 This project is licensed under the MIT License.
